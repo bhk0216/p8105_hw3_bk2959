@@ -4,6 +4,31 @@ author: "Stella Koo"
 date: "2024-10-08"
 output: github_document
 ---
+## Problem 1
+```{r}
+library(p8105.datasets)
+data("ny_noaa")
+```
+
+The data consists of `r nrow(ny_noaa)` and `r ncol(ny_noaa)`. Key variables include: `id` (station identifier), `date`, `prcp` (daily precipitation), `snwd` (snowfall in mm), `tmax` & `tmin` (maximum and minimum temperature). The dataset has significant missing values, particularly for temperature, snowfall, and snow depth, which may require data cleaning or imputation for analysis.
+
+```{r message = FALSE}
+library(tidyverse)
+
+ny_noaa |>
+  mutate(year = year(date),
+    month = month(date),
+    day = day(date),
+    tmax = as.numeric(tmax) / 10,
+    tmin = as.numeric(tmin) / 10,
+    prcp = prcp / 10,  
+    snow = snow / 10)
+
+common_snowfall = ny_noaa |>
+  filter(snow > 0) |>
+  count(snow) |>
+  arrange(desc(n))
+```
 
 ## Problem 2
 ### Joining datasets
